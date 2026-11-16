@@ -13,7 +13,7 @@ import Recipe from "./components/Recipe.vue";
         <Recipe />
     </main>
     <footer>
-        <p>All rights reserved! &copy; bankitatabanya.hu</p>
+        <p class="text-center">All rights reserved! &copy; bankitatabanya.hu</p>
     </footer>
 </template>
 
