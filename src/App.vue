@@ -1,17 +1,20 @@
 <script setup>
+import Filter from "./components/Filter.vue";
+import NewRecipe from "./components/NewRecipe.vue";
+import Recipe from "./components/Recipe.vue";
+
 </script>
-
 <template>
-<header>
-<h1></h1>
-</header>
-<main>
-
-</main>
-<footer>
-<p>All rights reserved! &copy; bankitatabanya.hu</p>
-</footer>
+    <header>
+        <NewRecipe />
+    </header>
+    <main>
+        <Filter />
+        <Recipe />
+    </main>
+    <footer>
+        <p>All rights reserved! &copy; bankitatabanya.hu</p>
+    </footer>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
