@@ -2,6 +2,10 @@
 import { ref, watch } from 'vue';
 import { shoppingState } from '../Storage/Store';
 
+
+
+const emit = defineEmits(['filteredList']);
+
 const store = shoppingState();
 const input = ref("");
 const difficulty = ref("");
@@ -11,31 +15,32 @@ const allRecipes = store.getItems();
 const shopping = ref([...allRecipes.value]);
 
 watch([input, difficulty, time], ([newInput, newDifficulty, newTime]) => {
-  let result = [...allRecipes.value];
+  const result = ref([...allRecipes.value]);
 
   if (newInput.trim() !== "") {
     const searchTerm = newInput.toLowerCase();
-    result = result.filter((a) => 
+    result.value = result.value.filter((a) => 
       a.getName().toLowerCase().includes(searchTerm)
     );
   }
 
   if (newDifficulty !== "") {
-    result = result.filter((a) => 
+    result.value = result.value.filter((a) => 
       String(a.getDifficulty()) == newDifficulty
     );
   }
 
   if (newTime == "1") {
-    result.sort((a, b) => a.getTime() - b.getTime());
+    result.value.sort((a, b) => a.getTime() - b.getTime());
   } else if (newTime == "2") {
-    result = result.filter((a) => a.getTime() <= 30);
+    result.value = result.value.filter((a) => a.getTime() <= 30);
   } else if (newTime == "3") {
-    result = result.filter((a) => a.getTime() >= 60);
+    result.value = result.value.filter((a) => a.getTime() >= 60);
   }
 
-  shopping.value = result;
-}, { immediate: true });
+  shopping.value = result.value;
+  emit(result.value)
+});
 </script>
 
 <template>

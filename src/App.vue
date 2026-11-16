@@ -8,16 +8,18 @@ import { RecipeBook } from "./data/recipeBook.js";
 import { shoppingState } from "./Storage/Store.js";
 import { ref } from "vue";
 const store = shoppingState();
-const recipeList;
+const recipeList = ref([]);
 const init = ()=>{
   for (let i = 0; i <RecipeBook.length; i++) {
       store.addItem(new RecipeC(RecipeBook[i].title,RecipeBook[i].description,RecipeBook[i].difficulty,RecipeBook[i].imgSrc,RecipeBook[i].time))
 
    }
-  recipeList = ref(store.getItems())
+  recipeList.value = ref(store.getItems())
 }
-
-
+const filteredList = ref([]);
+const defineFilteredList=(payload)=>{
+  filteredList.value = payload;
+}
 init();
 </script>
 <template>
@@ -25,8 +27,8 @@ init();
         <NewRecipe />
     </header>
     <main>
-        <Filter />
-        <Recipe />
+        <Filter @filtered-list="defineFilteredList()" />
+        <Recipe :filteredList="filteredList"/>
     </main>
     <footer>
         <p class="text-center">All rights reserved! &copy; bankitatabanya.hu</p>
