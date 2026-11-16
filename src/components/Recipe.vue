@@ -1,7 +1,9 @@
 <script setup>
-import { shoppingState } from '../Storage/Store';
 
-const store = shoppingState();
+const props = defineProps({
+    items:Array
+})
+
 
 
 
@@ -10,12 +12,12 @@ const store = shoppingState();
 
 <template>
 
-    <div class="container py-5">
+<div class="container py-5">
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     <div class="col">
-      <div class="card h-100 border-0 rounded-4 shadow-sm recipe-card overflow-hidden">
+      <div v-for="item in props.items" class="card h-100 border-0 rounded-4 shadow-sm recipe-card overflow-hidden">
         <div class="position-relative">
-          <img src="gulyasleves.jpg" class="card-img-top object-fit-cover" style="height: 220px;" alt="Gulyásleves">
+          <img :src=" item.getImg() " class="card-img-top object-fit-cover" style="height: 220px;" alt="Gulyásleves">
           <span class="position-absolute bottom-0 end-0 m-3 px-3 py-1 bg-white bg-opacity-75 rounded-pill fw-semibold text-dark small shadow-sm">
             🕒 x perc
           </span>

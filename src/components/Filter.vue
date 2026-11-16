@@ -11,7 +11,7 @@ const input = ref("");
 const difficulty = ref("");
 const time = ref("");
 
-const allRecipes = store.getItems();
+const allRecipes = ref(store.getItems());
 const shopping = ref([...allRecipes.value]);
 
 watch([input, difficulty, time], ([newInput, newDifficulty, newTime]) => {

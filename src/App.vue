@@ -30,9 +30,12 @@ init();
         <Filter @filtered-list="defineFilteredList()" />
         <Recipe :filteredList="filteredList"/>
     </main>
+    
     <footer>
+
         <p class="text-center">All rights reserved! &copy; bankitatabanya.hu</p>
     </footer>
+
 </template>
 
 <style scoped></style>

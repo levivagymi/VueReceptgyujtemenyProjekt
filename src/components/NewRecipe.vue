@@ -22,7 +22,7 @@ const difficulty = ref("");
 
 const add = () => {
 
-    store.addRecipe({
+    store.addItem({
 
         title: title.value,
 
