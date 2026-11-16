@@ -5,14 +5,17 @@ export default class Recipe{
   #description;
   #difficulty;
   #imgSrc;
+  #time;
 
-
-  constructor(title, des, difficulty, src){
+  constructor(title, des, difficulty, src, time){
     this.setTitle(title);
     this.setDescription(des);
     this.setDifficulty(difficulty);
     this.setImg(src);
+    this.setTime(time);
 
+    this.setTime = this.setTime.bind(this);
+    this.getTime = this.getTime.bind(this);
     this.setImg = this.setImg.bind(this);
     this.setTitle = this.setTitle.bind(this);
     this.setDescription = this.setDescription.bind(this);
@@ -22,6 +25,13 @@ export default class Recipe{
     this.getDescription = this.getDescription.bind(this);
     this.getDifficulty = this.getDifficulty.bind(this);
 }
+  setTime(time){
+    this.#time = time;
+  }
+
+  getTime(){
+    return this.#time
+  }
 
   setImg(src){
     this.#imgSrc = src;
