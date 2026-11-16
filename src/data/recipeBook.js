@@ -91,13 +91,6 @@ export const RecipeBook = [
     "time": 75
   },
   {
-    "title": "Marhapörkölt tarhonyával",
-    "description": "Hosszan főtt, gazdag marhapörkölt házi pirított tarhonyával.",
-    "difficulty": 2,
-    "imgSrc": "../assets/images/marhaporkolt.jpg",
-    "time": 160
-  },
-  {
     "title": "Sütőtök krémleves pirított tökmaggal",
     "description": "Selymes, fűszeres sütőtök leves ropogós magvakkal.",
     "difficulty": 0,
