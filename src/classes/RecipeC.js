@@ -1,6 +1,6 @@
-import Recipe from "../components/Recipe.vue";
 
-export default class Recipe{
+
+export default class RecipeC{
   #title;
   #description;
   #difficulty;

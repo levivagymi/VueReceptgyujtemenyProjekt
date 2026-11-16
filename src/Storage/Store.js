@@ -13,7 +13,6 @@ export const shoppingState = defineStore('shoppingList',()=>{
             items.value.splice(index,1);
         }
     
-    
         return{
             getItems,addItem,removeItem
         }
