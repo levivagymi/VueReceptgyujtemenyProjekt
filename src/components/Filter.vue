@@ -1,8 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { shoppingState } from '../Storage/Store';
-
-
 
 const emit = defineEmits(['filteredList']);
 
@@ -10,37 +8,53 @@ const store = shoppingState();
 const input = ref("");
 const difficulty = ref("");
 const time = ref("");
+const filteredCount = ref(store.getItems().length);
 
-const allRecipes = ref(store.getItems());
-const shopping = ref([...allRecipes.value]);
+const applyFilters = () => {
+  let result = [...store.getItems()];
 
-watch([input, difficulty, time], ([newInput, newDifficulty, newTime]) => {
-  const result = ref([...allRecipes.value]);
-
-  if (newInput.trim() !== "") {
-    const searchTerm = newInput.toLowerCase();
-    result.value = result.value.filter((a) => 
-      a.getName().toLowerCase().includes(searchTerm)
+  if (input.value.trim() !== "") {
+    const searchTerm = input.value.trim().toLowerCase();
+    result = result.filter((recipe) =>
+      recipe.getTitle().toLowerCase().includes(searchTerm)
     );
   }
 
-  if (newDifficulty !== "") {
-    result.value = result.value.filter((a) => 
-      String(a.getDifficulty()) == newDifficulty
-    );
+  if (difficulty.value !== "") {
+    const targetDifficulty =
+      difficulty.value === "0"
+        ? "Könnyű"
+        : difficulty.value === "1"
+          ? "Közepes"
+          : "Nehéz";
+
+    result = result.filter((recipe) => recipe.getDifficulty() === targetDifficulty);
   }
 
-  if (newTime == "1") {
-    result.value.sort((a, b) => a.getTime() - b.getTime());
-  } else if (newTime == "2") {
-    result.value = result.value.filter((a) => a.getTime() <= 30);
-  } else if (newTime == "3") {
-    result.value = result.value.filter((a) => a.getTime() >= 60);
+  if (time.value === "1") {
+    result.sort((a, b) => a.getTime() - b.getTime());
+  } else if (time.value === "2") {
+    result.filter((recipe) => recipe.getTime() <= 30);
+    result = result.filter((recipe) => recipe.getTime() <= 30);
+  } else if (time.value === "3") {
+    result = result.filter((recipe) => recipe.getTime() >= 60);
   }
 
-  shopping.value = result.value;
-  emit(result.value)
+  filteredCount.value = result.length;
+  emit('filteredList', result);
+};
+
+watch(
+  [input, difficulty, time, () => store.getItems().length], () => {
+    applyFilters();
+  },
+  { immediate: true }
+);
+
+onMounted(() => {
+  applyFilters();
 });
+
 </script>
 
 <template>
@@ -55,25 +69,29 @@ watch([input, difficulty, time], ([newInput, newDifficulty, newTime]) => {
             Mit főzzünk ma?
           </h2>
         </div>
-        
+
         <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background-color: #e6f0ec; color: #2c6e49;">
-          {{ shopping.length }} találat
+          {{ filteredCount }} találat
         </span>
       </div>
 
       <form @submit.prevent class="bg-white p-2 rounded-4 shadow-sm border border-light" role="search">
         <div class="row g-2 align-items-center">
           <div class="col-12 col-md-6">
-            <input 
-              class="form-control border-light-subtle bg-light bg-opacity-25 py-2 px-3 rounded-3" 
-              type="search" 
-              placeholder="Keress receptet..." 
-              aria-label="Keress receptet" 
+            <input
+              class="form-control border-light-subtle bg-light bg-opacity-25 py-2 px-3 rounded-3"
+              type="search"
+              placeholder="Keress receptet..."
+              aria-label="Keress receptet"
               v-model="input"
             />
           </div>
           <div class="col-12 col-md-3">
-            <select v-model="difficulty" class="form-select border-light-subtle bg-light bg-opacity-25 py-2 px-3 rounded-3 text-dark" aria-label="Nehézség kiválasztása">
+            <select
+              v-model="difficulty"
+              class="form-select border-light-subtle bg-light bg-opacity-25 py-2 px-3 rounded-3 text-dark"
+              aria-label="Nehézség kiválasztása"
+            >
               <option value="">Minden nehézség</option>
               <option value="0">Könnyű</option>
               <option value="1">Közepes</option>
@@ -81,7 +99,11 @@ watch([input, difficulty, time], ([newInput, newDifficulty, newTime]) => {
             </select>
           </div>
           <div class="col-12 col-md-3">
-            <select v-model="time" class="form-select border-light-subtle bg-light bg-opacity-25 py-2 px-3 rounded-3 text-dark" aria-label="Rendezés elkészítési idő szerint">
+            <select
+              v-model="time"
+              class="form-select border-light-subtle bg-light bg-opacity-25 py-2 px-3 rounded-3 text-dark"
+              aria-label="Rendezés elkészítési idő szerint"
+            >
               <option value="">Elkészítési idő szerint</option>
               <option value="1">Leggyorsabb elöl</option>
               <option value="2">30 perc alatt</option>

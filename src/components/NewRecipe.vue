@@ -1,54 +1,39 @@
 <script setup>
 
 import { ref } from 'vue';
-
 import { shoppingState } from '../Storage/Store';
-
-
+import RecipeC from '../classes/RecipeC';
 
 const store = shoppingState();
 
-
-
 const title = ref("");
-
 const description = ref("");
-
 const time = ref("");
-
 const difficulty = ref("");
 
-
-
 const add = () => {
+  if (!title.value.trim()) return;
 
-    store.addItem({
+  const newRecipe = new RecipeC(
+    title.value.trim(),
+    description.value.trim(),
+    Number(difficulty.value || 0),
+    "../assets/food.avif",
+    Number(time.value || 0)
+  );
 
-        title: title.value,
+  store.addItem(newRecipe);
 
-        description: description.value,
-
-        time: Number(time.value),
-
-        difficulty: difficulty.value
-
-    });
+  title.value = "";
+  description.value = "";
+  time.value = "";
+  difficulty.value = "";
 
 
 
-    title.value = "";
-
-    description.value = "";
-
-    time.value = "";
-
-    difficulty.value = "";
-
-}
+};
 
 </script>
-
-
 
 <template>
 

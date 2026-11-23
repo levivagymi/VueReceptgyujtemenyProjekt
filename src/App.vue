@@ -1,41 +1,45 @@
 <script setup>
-import { defineStore } from "pinia";
+import { ref } from "vue";
 import RecipeC from "./classes/RecipeC.js";
 import Filter from "./components/Filter.vue";
 import NewRecipe from "./components/NewRecipe.vue";
 import Recipe from "./components/Recipe.vue";
 import { RecipeBook } from "./data/recipeBook.js";
 import { shoppingState } from "./Storage/Store.js";
-import { ref } from "vue";
-const store = shoppingState();
-const recipeList = ref([]);
-const init = ()=>{
-  for (let i = 0; i <RecipeBook.length; i++) {
-      store.addItem(new RecipeC(RecipeBook[i].title,RecipeBook[i].description,RecipeBook[i].difficulty,RecipeBook[i].imgSrc,RecipeBook[i].time))
 
-   }
-  recipeList.value = ref(store.getItems())
-}
+const store = shoppingState();
 const filteredList = ref([]);
-const defineFilteredList=(payload)=>{
-  filteredList.value = payload;
-}
+
+const init = () => {
+  if (store.getItems().length === 0) {
+    for (let i = 0; i < RecipeBook.length; i++) {
+      const r = RecipeBook[i];
+      store.addItem(
+        new RecipeC(r.title, r.description, r.difficulty, r.imgSrc, r.time)
+      );
+    }
+  }
+  filteredList.value = [...store.getItems()];
+};
+
+const defineFilteredList = (payload) => {
+  filteredList.value = Array.isArray(payload) ? payload : [];
+};
+
 init();
 </script>
+
 <template>
-    <header>
-        <NewRecipe />
-    </header>
-    <main>
-        <Filter @filtered-list="defineFilteredList()" />
-        <Recipe :filteredList="filteredList"/>
-    </main>
-    
-    <footer>
-
-        <p class="text-center">All rights reserved! &copy; bankitatabanya.hu</p>
-    </footer>
-
+  <header>
+    <NewRecipe />
+  </header>
+  <main>
+    <Filter @filteredList="defineFilteredList" />
+    <Recipe :items="filteredList" />
+  </main>
+  <footer>
+    <p class="text-center">All rights reserved! &copy; bankitatabanya.hu</p>
+  </footer>
 </template>
 
 <style scoped></style>
